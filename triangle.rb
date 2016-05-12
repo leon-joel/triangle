@@ -1,20 +1,18 @@
-
-
-
 class Triangle
 
   # 引数
-  #  各辺の長さの配列
-  #  ※to_iで数値化出来るならstringを含んでいても可
-  #  ※小数は不可
+  #   a, b, c: 各辺の長さ
+  #            ※to_iで整数化出来るならstringでも可（よって、*ARGVを渡せる。引数の数があっていない場合は落ちるが…）
+  #            ※辺の長さが『nil,0以下』『to_iで正しく数値化出来ない』の場合、0 を返す。
+  #            ※小数が渡された場合、to_iで小数部が切り捨てられるので、正しい結果が返らない。
   # 戻り値
-  #  -1 : 引数エラー
-  #   0 : 三角形ではない（『辺の長さが負』はここ。『to_iで数値化出来ない文字列を含んでいる場合』、『小数を含んでいる場合』もここ）
+  #   0 : 三角形ではない
   #   1 : 不等辺三角形（なんでもない三角形）
   #   2 : 二等辺三角形
   #   3 : 正三角形
-  def self.is_valid(sizes)
-    return -1 if sizes.nil? || sizes.size != 3
+  def self.triangle_type(a, b, c)
+    # puts "#{a} #{b} #{c}"
+    sizes = [a, b, c]
 
     ###
     # 三角形の成立条件  ※参考: http://ameblo.jp/toyokunbenkyou/entry-10307543297.html
@@ -45,18 +43,10 @@ end
 ###
 
 if $0 == __FILE__
-  # p ARGV
-  # p ARGV.size
-  #
-  # if ARGV.size != 3
-  #   puts "Wrong number of arguments."
-  #   exit
-  # end
 
-  ret = Triangle.is_valid(ARGV)
+  ret = Triangle.triangle_type(*ARGV)
 
   str = case ret
-          when -1 then "引数エラー"
           when  0 then "三角形じゃないです＞＜"
           when  1 then "不等辺三角形ですね！"
           when  2 then "二等辺三角形ですね！"
