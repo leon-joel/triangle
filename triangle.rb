@@ -1,23 +1,45 @@
 # coding: utf-8
 
+require 'bigdecimal'
+require 'bigdecimal/util'
 
 class Triangle
 
-  def self.triangle_type2(argv)
-    sizes = argv.inject([]) { |s, a| s.concat(a.split(",").map(&:to_i)) }
-
-    triangle_type(*sizes)
+  # 各辺の長さを表す文字列配列（ARGVを想定）を
+  # 数値（Rational）の配列に変換
+  # @raise  ArgumentError Rationalに変換できない要素が含まれていた
+  def self.argv_to_num_array(argv)
+    # ARGVをスペース区切りで1つの文字列に
+    # スペースもしくはカンマで分割
+    # 空文字列は除外
+    # Rationalに変換
+    argv.join(" ")
+        .split(/[\s,]+/)
+        .reject(&:empty?)
+        .map { |a| Rational(a) }
   end
 
   # 引数
-  #   a, b, c: 各辺の長さ
-  #            ※to_iで整数化出来るならstringでも可（よって、*ARGVを渡せる。引数の数があっていない場合は落ちるが…）
-  #            ※辺の長さが『nil,0以下』『to_iで正しく数値化出来ない』『小数』の場合、0 を返す。
+  #   argv: 各辺の長さの配列 ※起動時引数ARGV（Stringの配列）を渡されることを想定
   # 戻り値
+  #   -1 : 引数エラー
   #   0 : 三角形ではない
   #   1 : 不等辺三角形（なんでもない三角形）
   #   2 : 二等辺三角形
   #   3 : 正三角形
+  def self.triangle_type_from_array(argv)
+    sizes = argv_to_num_array(argv)
+    return -1 if sizes.size != 3
+
+    triangle_type(*sizes)
+  rescue TypeError, ArgumentError => e
+    # 変換エラー
+    -1
+  end
+
+
+
+  # 引数には数値が格納されていることを前提とする
   def self.triangle_type(a, b, c)
     # puts "#{a} #{b} #{c}"
     sizes = [a, b, c]
@@ -27,7 +49,7 @@ class Triangle
     # aが最大辺の時、a < b + c
     ###
 
-    s = sizes.map(&:to_i).sort
+    s = sizes.sort
     # puts "最大辺:#{s[-1]}  その他の2辺:#{s[0]}, #{s[1]}"
 
     # 成立条件を満たさない ⇒ 三角形ではない
@@ -59,10 +81,10 @@ if $0 == __FILE__
   #   exit
   # end
 
-  ret = Triangle.triangle_type2(ARGV)
+  ret = Triangle.triangle_type_from_array(ARGV)
 
   str = case ret
-          # when -1 then "引数エラー"
+          when -1 then "引数エラー"
           when  0 then "三角形じゃないです＞＜"
           when  1 then "不等辺三角形ですね！"
           when  2 then "二等辺三角形ですね！"
