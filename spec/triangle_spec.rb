@@ -2,66 +2,66 @@ require File.expand_path(File.dirname(__FILE__) + '/../triangle')
 
 describe Triangle do
 
-  describe "型実験" do
-    it { expect("a".is_a?(String)).to be_true }
-    it { expect("a".is_a?(Numeric)).to be_false }
-
-    it { expect("1".is_a?(String)).to be_true }
-    it { expect("1".is_a?(Numeric)).to be_false }
-
-    it { expect("a".is_a?(String)).to be_true }
-
-
-    d = "a".to_d
-    p d
-    d = BigDecimal("a")
-    p d
-    d = "k".to_d
-    p d
-    d = "金".to_d
-    p d
-    d = BigDecimal.new("金")
-    p d
-    f = Float("1.2")
-    p f
-    # f = Float("金")
-    # p f
-    # it { expect("a".to_d).to be_true }
-
-    r = Rational("1.1")
-    p r
-    r = Rational(".1")
-    p r
-    r = Rational("-1.1")
-    p r
-
-  end
-
-  describe "split実験" do
-
-    it { expect("1,".split(",")).to eq ["1"] }
-
-    it { expect(",1".split(",")).to eq ["", "1"] }
-    it { expect(",1".split(",").reject(&:empty?)).to eq ["1"] }
-
-    testdata = {
-        ["1, ", " -1", " ,2"] =>  [1, -1, 2],
-        ["1,-1,2"] => [1, -1, 2],
-        ["1,-1,", " 2"] => [1, -1, 2],
-        ["1", "2", "3"] => [1, 2, 3],
-    }
-
-    testdata.each do |q, ans|
-      it { expect(q.inject([]) { |s, a| s.concat(a.split(/\s*,\s*/).reject(&:empty?).map(&:to_i)) }).to eq ans }
-    end
-    testdata.each do |q, ans|
-      puts "q -> #{q}"
-      puts "q.join(" ") -> #{q.join(" ")}"
-      puts "q.join(" ").split(/[\s,]+/) -> #{q.join(" ").split(/[\s,]+/)}"
-      # it { expect(q.join(" ").split(/\s*,\s*/).reject(&:empty?).map(&:to_i)).to eq ans }
-      it { expect(q.join(" ").split(/[\s,]+/).reject(&:empty?).map(&:to_i)).to eq ans }
-    end
-  end
+  # describe "型実験" do
+  #   it { expect("a".is_a?(String)).to be_truthy }
+  #   it { expect("a".is_a?(Numeric)).to be_falsy }
+  #
+  #   it { expect("1".is_a?(String)).to be_truthy }
+  #   it { expect("1".is_a?(Numeric)).to be_falsy }
+  #
+  #   it { expect("a".is_a?(String)).to be_truthy }
+  #
+  #
+  #   d = "a".to_d
+  #   p d
+  #   d = BigDecimal("a")
+  #   p d
+  #   d = "k".to_d
+  #   p d
+  #   d = "金".to_d
+  #   p d
+  #   d = BigDecimal.new("金")
+  #   p d
+  #   f = Float("1.2")
+  #   p f
+  #   # f = Float("金")
+  #   # p f
+  #   # it { expect("a".to_d).to be_true }
+  #
+  #   r = Rational("1.1")
+  #   p r
+  #   r = Rational(".1")
+  #   p r
+  #   r = Rational("-1.1")
+  #   p r
+  #
+  # end
+  #
+  # describe "split実験" do
+  #
+  #   it { expect("1,".split(",")).to eq ["1"] }
+  #
+  #   it { expect(",1".split(",")).to eq ["", "1"] }
+  #   it { expect(",1".split(",").reject(&:empty?)).to eq ["1"] }
+  #
+  #   testdata = {
+  #       ["1, ", " -1", " ,2"] =>  [1, -1, 2],
+  #       ["1,-1,2"] => [1, -1, 2],
+  #       ["1,-1,", " 2"] => [1, -1, 2],
+  #       ["1", "2", "3"] => [1, 2, 3],
+  #   }
+  #
+  #   testdata.each do |q, ans|
+  #     it { expect(q.inject([]) { |s, a| s.concat(a.split(/\s*,\s*/).reject(&:empty?).map(&:to_i)) }).to eq ans }
+  #   end
+  #   testdata.each do |q, ans|
+  #     puts "q -> #{q}"
+  #     puts "q.join(" ") -> #{q.join(" ")}"
+  #     puts "q.join(" ").split(/[\s,]+/) -> #{q.join(" ").split(/[\s,]+/)}"
+  #     # it { expect(q.join(" ").split(/\s*,\s*/).reject(&:empty?).map(&:to_i)).to eq ans }
+  #     it { expect(q.join(" ").split(/[\s,]+/).reject(&:empty?).map(&:to_i)).to eq ans }
+  #   end
+  # end
 
   describe "Triangle.argv_to_num_array のテスト" do
     describe "正常系" do
@@ -95,7 +95,7 @@ describe Triangle do
           ["a,", "d,", "e"] => false,
       }
       invalid_data.each do |q, ans|
-        it { expect { Triangle.argv_to_num_array(q) }.to raise_error }
+        it { expect { Triangle.argv_to_num_array(q) }.to raise_error(ArgumentError) }
       end
     end
 
